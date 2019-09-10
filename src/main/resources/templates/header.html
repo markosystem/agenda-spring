@@ -1,0 +1,54 @@
+<div th:fragment="header">
+	<!-- Principal CSS do Bootstrap -->
+	<link rel="stylesheet"
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+		crossorigin="anonymous">
+	<header>
+		<!-- Barra de Navegação -->
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="/">Contatos</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#conteudoNavbarSuportado"
+				aria-controls="conteudoNavbarSuportado" aria-expanded="false"
+				aria-label="Alterna navegação">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item"><a class="nav-link" href="/add">Cadastrar
+							<span class="sr-only">(página atual)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/">Listar <span
+							class="sr-only">(página atual)</span>
+					</a></li>
+				</ul>
+				<div class="form-inline my-5 my-lg-0">
+					<label> 
+						<input class="form-control mr-sm-2" type="search"
+							list="searchList" oninput="urlExternal('teste');"
+							id="inputSearchGithub" placeholder="Pesquisar no GitHub"
+							aria-label="Pesquisar" /> 
+						
+						<datalist id="searchList"></datalist>
+					</label>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<div class="container">
+		<!-- Mensagens globais da sessao -->
+		<div class="alert alert-info alert-dismissible fade show"
+			th:if="${messages}" role="alert">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<strong>Atenção!</strong> <br />
+			<div th:each="msg : ${messages}">
+				<span th:text="${msg}"></span>
+			</div>
+		</div>
+	</div>
+</div>

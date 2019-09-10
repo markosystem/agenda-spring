@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lista de Contatos</title>
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<div class="container">
+		<div class="py-5 text-center">
+			<div class="d-block mx-auto mb-2">
+				<img src="https://spring.io/img/homepage/icon-spring-framework.svg"
+					alt="Icone do Spring" width="80" height="80" /> <img
+					src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+					alt="Icone do Boostrap" width="80" height="80" />
+			</div>
+			<h2>Framework Spring</h2>
+			<p class="lead">Estudos com Framework Spring Boot, Data JPA e
+				MVC.</p>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<h1>Seus Contatos</h1>
+			</div>
+			<div class="col-md-4 pull-right">
+				<form method="get">
+					<input name="search" id="campoSearch" type="text"
+						th:value="${search}" maxlength="255"
+						class="form-control pull-right"
+						placeholder="Informe um termo para buscar e tecle Enter!">
+				</form>
+
+			</div>
+			<div></div>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped table-sm">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Avatar</th>
+						<th>Nome Completo</th>
+						<th>E-mail</th>
+						<th>Github</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="contato: ${contatos}">
+						<td th:text="${contato.id}"></td>
+						<td><img th:src="${contato.avatar}" alt="Avatar user"
+							width="50" height="50" /></td>
+						<td th:text="@{${contato.nome}+' '+${contato.sobrenome}}"></td>
+						<td><a th:href="@{'mailto:'+${contato.email}}"
+							th:text="${contato.email}" target="_blank"></a></td>
+						<td><a th:href="@{'https://github.com/'+${contato.github}}"
+							th:text="${contato.github}" target="_blank"></a></td>
+						<td>
+							<!-- Botão visualizar contato (modal) -->
+							<button class="btn btn-success btn-sm" data-toggle="modal"
+								data-target="#modalVisualizar"
+								th:onclick="@{setDadosFormVisualizar({id})(id=${contato.id})}">
+								<span class="glyphicon glyphicon-print"></span> view
+							</button> <!-- Botão editar contato --> <a
+							th:href="@{/edit/{id}(id=${contato.id})}"
+							class="btn btn-primary btn-sm"> <span
+								class="glyphicon glyphicon-print"></span> edit
+						</a> <!-- Botão excluir contato (modal) -->
+							<button class="btn btn-danger btn-sm" data-toggle="modal"
+								data-target="#modalExclusao"
+								th:onclick="@{setDadosFormDelete({id})(id=${contato.id})}">
+								<span class="glyphicon glyphicon-print"></span> del
+							</button>
+						</td>
+					</tr>
+					<tr th:if="${contatos.size()} == 0">
+						<td colspan="6">Nenhum registro encontrado!</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- Bloco modal para exclusão -->
+		<div class="modal fade" id="modalExclusao" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Atenção!</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form method="POST" id="form-delete">
+						<div class="modal-body">
+							<div class="row">
+								<input type="hidden" name="id" />
+								<div class="col-md-12 mb-6">
+									<label for="nome">Tem certeza que deseja excluir o
+										contato?</label> <input value="" id="nomeCompleto" readonly="true"
+										type="text" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+							<button type="submit" class="btn btn-success">Sim</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Bloco modal para apresentação do contato -->
+		<div class="modal fade" id="modalVisualizar" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalVisualizarLabel">Visualizar
+							Contato</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form method="POST" id="form-delete">
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<label for="githubVisualizar">Github</label> <input type="text"
+										id="githubVisualizar" class="form-control" readonly="true" />
+
+								</div>
+								<div class="col-md-12">
+									<label for="emailVisualizar">Email</span></label> <input type="email"
+										id="emailVisualizar" class="form-control" readonly="true" />
+								</div>
+								<div class="col-md-12">
+									<label for="nomeVisualizar">Nome</label> <input type="text"
+										id="nomeVisualizar" class="form-control" readonly="true" />
+								</div>
+								<div class="col-md-12">
+									<label for="sobrenomeVisualizar">Sobrenome</label> <input
+										type="text" id="sobrenomeVisualizar" class="form-control"
+										readonly="true" />
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Scripts para consulta de API -->
+	<script type="text/javascript">
+		document.querySelector("#campoSearch").focus();
+	
+		async function getContato(id) {
+			let response = await
+			fetch(`/api/contatos/id/${id}`);
+			let data = await
+			response.json()
+			return data;
+		}
+	
+		async function getContatoSearch(search) {
+			let response = await
+			fetch(`/api/contatos/${search}`);
+			let data = await
+			response.json()
+			return data;
+		}
+	
+		async function setDadosFormDelete(id) {
+			data = await getContato(id);
+			form = document.querySelector("#form-delete");
+			form.setAttribute('action', `/delete/${data.id}`);
+			nome = document.querySelector("#nomeCompleto");
+			nome.value = data.nome + " " + data.sobrenome;
+		}
+	
+		async function setDadosFormVisualizar(id) {
+			data = await
+			getContato(id);
+			document.querySelector("#githubVisualizar").value = data.github;
+			document.querySelector("#emailVisualizar").value = data.email;
+			document.querySelector("#nomeVisualizar").value = data.nome;
+			document.querySelector("#sobrenomeVisualizar").value = data.sobrenome;
+		}
+	
+		const inputSearch = document.querySelector('#inputSearchGithub');
+	
+		inputSearch.addEventListener('input', debounce(async function(){
+			list = await getContatoSearch(document.querySelector("#inputSearchGithub").value);
+			const datalist = document.querySelector("#searchList");
+			datalist.innerHTML = "";
+			for (var i = 0 ; i < list.length; i++) {
+			    var op = document.createElement("option"); 
+				op.textContent = list[i].nome;
+				op.value = list[i].github;
+				datalist.appendChild(op);
+			}
+		}, 500));
+	
+		function debounce(func, wait) {
+		    let timer = null;
+		    return function() {
+		        clearTimeout(timer);
+		        timer = setTimeout(func, wait);
+		    }
+		}
+	
+		function urlExternal(url){
+			let val = document.querySelector("#inputSearchGithub").value;
+			let opts = document.querySelector("#searchList").childNodes;
+		    for (var i = 0; i < opts.length; i++) {
+		      if (opts[i].value === val) {
+				window.open('https://github.com/'+opts[i].value, '_blank');
+		        break;
+		      }
+		    }
+		}
+	</script>
+	<div th:replace="footer :: footer"></div>
+</body>
+</html>

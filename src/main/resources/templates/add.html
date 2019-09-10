@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gerenciar Contatos</title>
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<div class="container">
+		<h1
+			th:text="@{${contato.id == null ? 'Cadastrar':'Editar'}+' '+Contato}">
+			Contato</h1>
+		<form th:object="${contato}" th:action="@{/save}" method="POST">
+			<!-- Bloco para apresentação de mensagens de erros -->
+			<div class="row" th:if="${#fields.hasAnyErrors()}">
+				<div class="col-md-12">
+					<div class="alert alert-info alert-dismissible fade show"
+						role="alert">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Validação de Formulário!</strong> <br />
+						<div th:each="detailedError : ${#fields.detailedErrors()}">
+							<span th:text="${detailedError.message}"></span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="row">
+				<input type="hidden" th:field="*{id}" />
+				<div class="col-md-6 mb-3">
+					<label for="github">Github</label> <input type="text"
+						th:classappend="${#fields.hasErrors('github')}? 'has-error'"
+						required class="form-control" th:field="*{github}" min="3"
+						maxlength="100" placeholder="Informe um nickname do github!" />
+
+				</div>
+				<div class="col-md-6 mb-3">
+					<label for="email">Email</span></label> <input type="email"
+						th:classappend="${#fields.hasErrors('email')}? 'has-error'"
+						th:field="*{email}" class="form-control" maxlength="255"
+						placeholder="Informe um e-mail (exemplo: fulano@exemplo.com)"
+						required />
+				</div>
+				<div class="col-md-6 mb-3">
+					<label for="nome">Nome</label> <input
+						th:classappend="${#fields.hasErrors('nome')}? 'has-error'"
+						th:field="*{nome}" maxlength="255" type="text"
+						class="form-control" placeholder="Informe um nome!" required>
+				</div>
+				<div class="col-md-6 mb-3">
+					<label for="sobrenome">Sobrenome</label> <input maxlength="100"
+						th:classappend="${#fields.hasErrors('sobrenome')}? 'has-error'"
+						th:field="*{sobrenome}" type="text" class="form-control"
+						placeholder="Informe um sobrenome" required>
+				</div>
+				<div class="col-md-12 text-center">
+					<button class="btn btn-primary" role="button" type="submit">Salvar</button>
+					<a th:href="@{/}" class="btn btn-danger" role="button">Cancelar</a>
+				</div>
+		</form>
+	</div>
+
+	<div th:replace="footer :: footer"></div>
+</body>
+</html>

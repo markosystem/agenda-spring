@@ -1,9 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('run') {
+    stage('build') {
       steps {
-        sh './mvnw spring-boot:run'
+        sh 'docker build -t agenda . '
       }
     }
   }

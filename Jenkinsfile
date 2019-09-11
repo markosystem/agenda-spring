@@ -13,7 +13,7 @@ pipeline {
     }
     stage('run') {
       steps {
-        sh 'docker run -p 8080:8080 agenda'
+        sh 'docker run -d -p 8080:8080 --name agenda agenda'
       }
     }
   }

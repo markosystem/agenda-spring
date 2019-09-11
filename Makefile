@@ -21,8 +21,16 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 	printf "\n"
 
-## initialize the application;
-run:
-	@echo "### Run project for http://localhost:8080/ ###"
-	./mvnw spring-boot:run
+## install dependencies and build application with docker;
+build:
+	@echo "### Build imagem docker ###"
+	docker build -t agenda . 
 	@echo ""
+
+## initialize the application with docker;
+run:
+	@echo "### Run image docker project for http://localhost:8080/ ###"
+	docker run -p 8080:8080 agenda
+	@echo ""
+
+all: build run
